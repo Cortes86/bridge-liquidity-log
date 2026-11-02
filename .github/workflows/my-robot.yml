@@ -1,7 +1,7 @@
 name: Bridge Liquidity Sync
 on:
   schedule:
-    - cron: '37 14 * * 2,4,7'
+    - cron: '37 14 * * 2,4,0'
   workflow_dispatch:
 permissions:
   contents: write
@@ -16,6 +16,7 @@ jobs:
           sleep $((25 + RANDOM % 100))
           git config user.name "$(git log -1 --format='%an')"
           git config user.email "$(git log -1 --format='%ae')"
+          git pull --rebase origin main
           echo "- [$(date -u '+%Y-%m-%d %H:%M UTC')] Cross-chain Route Active | Avg Settlement: $((15 + RANDOM % 40))s" >> bridge-routes.md
           MSGS=("docs: update bridge settlement time" "chore: log cross-chain route status" "sync: check relayer liquidity")
           git add bridge-routes.md
